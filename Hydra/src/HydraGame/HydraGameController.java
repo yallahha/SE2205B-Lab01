@@ -31,6 +31,8 @@ public class HydraGameController implements Initializable {
     private Label message;
 
     private int startingSize;
+    private String workchop = "chop";
+    private char chop;
 
     @FXML
     public void setHeadSize() {
@@ -39,15 +41,18 @@ public class HydraGameController implements Initializable {
         hydraHeadSize.setText(Integer.toString(startingSize));
     }
     ListInterface<HydraHead> headList = null;
+    ListInterface<String> worklist = null;
 
 
     public void play() {
         message.setText("");
         headList = new AList<>();
+        worklist = new AList<>();
 
         BallPane.getChildren().removeAll(BallPane.getChildren());
         HydraHead head = makeHead(startingSize);
         headList.add(head);
+        
         BallPane.add(head, head.getGridX(), head.getGridY());
     }
 
@@ -55,6 +60,7 @@ public class HydraGameController implements Initializable {
         BallPane.getChildren().removeAll(BallPane.getChildren());
         for (int i = 1; i <= headList.getLength(); i++) {
             HydraHead head = headList.getEntry(i);
+            
             BallPane.add(head, head.getGridX(), head.getGridY());
         }
     }
@@ -67,16 +73,17 @@ public class HydraGameController implements Initializable {
             HydraHead ball = (HydraHead) e.getSource();
             BallPane.getChildren().remove(ball); // remove from the screen
             headList.remove(headList.getPosition(ball)); // remove from the list
-
+            
             int s = ball.getHeadSize();
             if (s > 1) {
                 // add two smaller balls
                 headList.add(makeHead(s - 1));
-                headList.add(makeHead(s - 1));              
+                headList.add(makeHead(s - 1));  
+                worklist.add(workchop);
                 updatePane();
             }
             if (headList.getLength() == 0) {
-               message.setText("Good Job! - Play Again");
+               message.setText("Good Job! you have made " + worklist.getLength() + "cuts, where " + worklist.getLength() + " is the number of strings in the list");
             };
         });
         return head;

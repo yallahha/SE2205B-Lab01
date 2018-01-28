@@ -45,4 +45,6 @@ public interface ListInterface <T>{
         /* Task: get the position of a given entry.*/
 	public int getPosition(T anEntry);
 
+  //  public void add(String chop);
+
 }
